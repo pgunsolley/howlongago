@@ -1,14 +1,19 @@
 <?php
 
+// TODO: Abstract all functionality into a separated concerns.
+
 namespace DatesProgram;
 
+require_once 'FakeLoadingScreen.php';
+require_once 'functions.php';
+
+use PGunsolley\Tools\CLI\FakeLoadingScreen;
 use DateTime;
 use DateTimeZone;
 use DateInterval;
 use Exception;
 use TypeError;
 use Throwable;
-use Iterator;
 
 abstract class ErrorBag 
 {
@@ -118,23 +123,6 @@ abstract class Program
         return $interval;
     }
 
-    protected static function getIterator(array $data, int $delay = 100000): Iterator 
-    {
-        foreach ($data as $iterableItem) {
-            usleep($delay);
-            yield $iterableItem;
-        }
-    }
-
-    // TODO: Make sure this works lol
-    protected static function displayIterator(Iterator $i, callable $displayCallback, callable $completeCallback): void 
-    {
-        foreach ($i as $item) {
-            $displayCallback($item);
-        }
-        $completeCallback();
-    }
-
     public static function main(): void 
     {
         self::p("Ready to feel old? Enter the date of a significant event in your life, and I will attempt to return how long ago it happened!");        
@@ -145,6 +133,7 @@ abstract class Program
                 self::p("Date format is invalid. ");
                 continue;
             }
+            $eventName = self::q("What was the event? ");
             self::p("For more accurate results, please enter the timezone of the event (leave blank to pass): ");
             $eventTzString = self::rl();
             if ($eventTzString === '') {
@@ -162,16 +151,32 @@ abstract class Program
             
             $interval = self::getDateInterval($currentDateObj, $eventDateObj);
 
-            self::displayIterator(
-                self::getIterator(array_merge(['Calculating'], array_fill(0, 20, '.'))), function($item) {
-                    $stdout = fopen('php://output', 'w');
-                    fwrite($stdout, $item, strlen($item));
-                    fclose($stdout);
-                }, function() {
-                    echo PHP_EOL;
-                }
-            );
-            self::p($interval->format("The event happened %y years, %m months, %d days ago. Feel old, yet?"));            
+            // Display fake loading prompt... lol
+            FakeLoadingScreen::displayByLine([
+                [
+                    'message' => 'Loading',
+                    'trailingCharCount' => 12,
+                    'trailingChar' => '.',
+                    'onRender' => 'onRenderHandler',
+                    'onComplete' => 'onCompleteHandler'
+                ],
+                [
+                    'message' => 'Reticulating Splines',
+                    'trailingCharCount' => 23,
+                    'trailingChar' => '.',
+                    'onRender' => 'onRenderHandler',
+                    'onComplete' => 'onCompleteHandler'
+                ],
+                [
+                    'message' => 'Generating Time Paradox',
+                    'trailingCharCount' => 30,
+                    'trailingChar' => '.',
+                    'onRender' => 'onRenderHandler',
+                    'onComplete' => 'onCompleteHandler'
+                ]
+            ]);
+
+            self::p($interval->format("{$eventName} happened %y years, %m months, %d days ago. Feel old, yet?"));
             if (!self::askRunAgain("Would you like to try a different date? (Y/n) ")) {
                 self::$_running = false;
             }
