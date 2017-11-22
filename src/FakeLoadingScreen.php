@@ -61,9 +61,4 @@ abstract class FakeLoadingScreen
             );
         }
     }
-
-    public static function displaySpinner(array $options): void
-    {
-
-    }
 }

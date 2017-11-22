@@ -1,11 +1,9 @@
 <?php
 
-// TODO: Abstract all functionality into a separated concerns.
-
 namespace DatesProgram;
 
-require_once 'FakeLoadingScreen.php';
-require_once 'functions.php';
+require_once dirname(__DIR__) . '/src/FakeLoadingScreen.php';
+require_once dirname(__DIR__) . '/src/functions.php';
 
 use PGunsolley\Tools\CLI\FakeLoadingScreen;
 use DateTime;
@@ -180,7 +178,6 @@ abstract class Program
             if (!self::askRunAgain("Would you like to try a different date? (Y/n) ")) {
                 self::$_running = false;
             }
-            ErrorBag::log('logs/simple-log.txt');
         }
     }
 }
