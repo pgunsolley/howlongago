@@ -1,0 +1,1 @@
+2017-11-22 20:59:39: Too few arguments to function DatesProgram\Program::getDateTimeZoneObject(), 0 passed in C:\Users\patri\OneDrive\documents\projects\php\howlongago\cli.php on line 103 and exactly 1 expected

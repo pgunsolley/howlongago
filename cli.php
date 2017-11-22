@@ -60,6 +60,19 @@ abstract class Program
         return self::rl();
     }
 
+    protected static function askRunAgain(string $prompt, string $yes = 'y', string $no = 'n'): bool 
+    {
+        while (true) {
+            self::p($prompt);
+            $option = strtolower(self::rl());
+            if ($option === $yes) {
+                return true;
+            } elseif ($option === $no) {
+                return false;
+            }
+        }
+    }
+
     protected static function validateDateFormat(string $dateString): bool 
     {
         if (1 === preg_match('/^(\d{2})\/(\d{2})\/(\d{4})/', $dateString)) {
@@ -68,13 +81,13 @@ abstract class Program
         return false;
     }
 
-    //TODO: Fix this darn thing
     protected static function getDateTimeZoneObject(string $tzString): DateTimeZone 
     {
+        if ($tzString === '') {
+            $tzString = 'America/Chicago';
+        }
         try {
-            if ($tzString === '') {
-                $tzObj = new DateTimeZone($tzString);                
-            }
+            $tzObj = new DateTimeZone($tzString);
         } catch (Throwable $e) {
             ErrorBag::setMessage($e->getMessage());
         }
@@ -134,8 +147,14 @@ abstract class Program
             }
             self::p("For more accurate results, please enter the timezone of the event (leave blank to pass): ");
             $eventTzString = self::rl();
+            if ($eventTzString === '') {
+                self::p("Defaulting to America/Chicago.");
+            }
             self::p("For more accurate results, please enter your current timezone: (leave blank to pass): ");
             $currentTzString = self::rl();
+            if ($currentTzString === '') {
+                self::p("Defaulting to America/Chicago.");                
+            }
         
             $currentDateObj = self::getDateObject();
             $eventTzObj = self::getDateTimeZoneObject($eventTzString);
@@ -153,8 +172,9 @@ abstract class Program
                 }
             );
             self::p($interval->format("The event happened %y years, %m months, %d days ago. Feel old, yet?"));            
-            self::p("Would you like to try a different date? (Y/n) ");
-            self::$_running = strtolower(self::rl()) !== 'y' ? false : true;
+            if (!self::askRunAgain("Would you like to try a different date? (Y/n) ")) {
+                self::$_running = false;
+            }
             ErrorBag::log('logs/simple-log.txt');
         }
     }
