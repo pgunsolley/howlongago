@@ -23,6 +23,19 @@ abstract class ErrorBag
     {
         return self::$_errors;
     }
+
+    public static function log(string $path): void 
+    {
+        $file = fopen($path, 'w');
+        foreach (self::$_errors as $error) {
+            fwrite($file, sprintf(
+                "%s: %s\r\n",
+                date('Y-m-d H:i:s'),
+                $error
+            ));
+        }
+        fclose($file);
+    }
 }
 
 abstract class Program 
@@ -70,6 +83,7 @@ abstract class Program
 
     protected static function getDateObject(?string $date = null, ?DateTimeZone $tzObj = null): DateTime 
     {
+        $dateObj = new DateTime();
         try {
             if (!$tzObj) {
                 $tzObj = self::getDateTimeZoneObject();
@@ -141,6 +155,7 @@ abstract class Program
             self::p($interval->format("The event happened %y years, %m months, %d days ago. Feel old, yet?"));            
             self::p("Would you like to try a different date? (Y/n) ");
             self::$_running = strtolower(self::rl()) !== 'y' ? false : true;
+            ErrorBag::log('logs/simple-log.txt');
         }
     }
 }
