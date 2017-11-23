@@ -7,7 +7,7 @@ use Iterator;
 abstract class FakeLoadingScreen
 {
     /**
-     * Get an iterator.
+     * Get an iterator for a fake loading screen.
      * 
      * Pass an array of values you would like to wrap with an \Iterator.
      * 
@@ -55,7 +55,17 @@ abstract class FakeLoadingScreen
         foreach ($options as $item) {
             
             self::displayIterator(
-                self::getIterator(array_merge([$item['message']], array_fill(0, $item['trailingCharCount'], $item['trailingChar']))), 
+                self::getIterator(
+                    array_merge(
+                        [$item['message']], 
+                        array_fill(
+                            0, 
+                            $item['trailingCharCount'], 
+                            $item['trailingChar']
+                        )
+                    ),
+                    $item['renderSpeed']
+                ), 
                 $item['onRender'],
                 $item['onComplete']
             );

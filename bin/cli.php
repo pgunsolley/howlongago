@@ -156,21 +156,40 @@ abstract class Program
                     'trailingCharCount' => 12,
                     'trailingChar' => '.',
                     'onRender' => 'onRenderHandler',
-                    'onComplete' => 'onCompleteHandler'
+                    'onComplete' => 'onCompleteHandler',
+                    'renderSpeed' => 100000
                 ],
                 [
                     'message' => 'Reticulating Splines',
                     'trailingCharCount' => 23,
                     'trailingChar' => '.',
                     'onRender' => 'onRenderHandler',
-                    'onComplete' => 'onCompleteHandler'
+                    'onComplete' => 'onCompleteHandler',
+                    'renderSpeed' => 10000
                 ],
                 [
                     'message' => 'Generating Time Paradox',
-                    'trailingCharCount' => 30,
+                    'trailingCharCount' => 20,
                     'trailingChar' => '.',
                     'onRender' => 'onRenderHandler',
-                    'onComplete' => 'onCompleteHandler'
+                    'onComplete' => 'onCompleteHandler',
+                    'renderSpeed' => 100000                    
+                ],
+                [
+                    'message' => 'Fixing ripple in the time space continuum',
+                    'trailingCharCount' => 54,
+                    'trailingChar' => '.',
+                    'onRender' => 'onRenderHandler',
+                    'onComplete' => 'onCompleteHandler',
+                    'renderSpeed' => 100000
+                ],
+                [
+                    'message' => 'Finalizing',
+                    'trailingCharCount' => 54,
+                    'trailingChar' => '.',
+                    'onRender' => 'onRenderHandler',
+                    'onComplete' => 'onCompleteHandler',
+                    'renderSpeed' => 50000
                 ]
             ]);
 
